@@ -32,12 +32,10 @@ TrajectoryPlanner::TrajectoryPlanner()
   trajectory_pub_ = this->create_publisher<trajectory_msgs::msg::JointTrajectory>(
     "/planned_trajectory", 10);
   
-  // Create subscriber for waypoint file commands
   waypoint_file_sub_ = this->create_subscription<std_msgs::msg::String>(
     "/load_waypoint_file", 10,
     std::bind(&TrajectoryPlanner::waypoint_file_callback, this, std::placeholders::_1));
   
-  // Create timer for publishing joint states and trajectory execution
   trajectory_timer_ = this->create_wall_timer(
     std::chrono::milliseconds(10), // 100Hz
     std::bind(&TrajectoryPlanner::trajectory_timer_callback, this));
@@ -75,7 +73,6 @@ bool TrajectoryPlanner::load_waypoints_from_file(const std::string& filename)
   while (std::getline(file, line)) {
     line_number++;
     
-    // Skip empty lines and comments
     if (line.empty() || line[0] == '#') {
       continue;
     }
@@ -183,14 +180,11 @@ void TrajectoryPlanner::interpolate_to_waypoint(const Waypoint& target_waypoint,
   std::vector<double> start_positions;
   
   if (current_waypoint_index_ == 0) {
-    // Start from current position (all zeros initially)
     start_positions = std::vector<double>(joint_names_.size(), 0.0);
   } else {
-    // Start from previous waypoint
     start_positions = waypoints_[current_waypoint_index_ - 1].joint_positions;
   }
   
-  // Cubic interpolation for smooth motion
   current_joint_positions_ = cubic_interpolation(start_positions, target_waypoint.joint_positions, progress);
 }
 
@@ -201,7 +195,6 @@ std::vector<double> TrajectoryPlanner::cubic_interpolation(
 {
   std::vector<double> result(start_pos.size());
   
-  // Cubic interpolation: smooth acceleration and deceleration
   double t2 = t * t;
   double t3 = t2 * t;
   double cubic_t = 3 * t2 - 2 * t3; // Smooth S-curve
@@ -236,7 +229,7 @@ void TrajectoryPlanner::log_current_state()
     current_joint_positions_[6]);
 }
 
-} // namespace ur10e_lift_trajectory_control
+} 
 
 int main(int argc, char** argv)
 {

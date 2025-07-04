@@ -48,7 +48,7 @@ void IKTrajectoryPlanner::waypoint_file_callback(const std_msgs::msg::String::Sh
   if (load_waypoints(msg->data)) {
     RCLCPP_INFO(this->get_logger(), "Loaded %zu waypoints", waypoints_.size());
     publish_waypoint_markers();
-    executed_path_.clear(); // Clear previous path
+    executed_path_.clear(); 
     
     // Start trajectory execution
     trajectory_active_ = true;
@@ -91,17 +91,15 @@ std::vector<double> IKTrajectoryPlanner::solve_ik_simple(double x, double y, dou
 {
   std::vector<double> joints(7, 0.0);
   
-  // Improved geometric IK approximation
-  joints[0] = std::max(0.0, std::min(1.0, z - 0.9)); // lift_joint (better offset)
-  joints[1] = atan2(y, x); // base rotation
+  joints[0] = std::max(0.0, std::min(1.0, z - 0.9));
+  joints[1] = atan2(y, x); 
   
   double r = sqrt(x*x + y*y);
-  double target_height = z - joints[0] - 0.18 - 0.163; // Remove base heights
+  double target_height = z - joints[0] - 0.18 - 0.163;
   
-  // Better arm positioning
-  joints[2] = -atan2(target_height - 0.3, r - 0.2); // shoulder_lift
-  joints[3] = 1.2; // elbow
-  joints[4] = 0.0; // wrist joints
+  joints[2] = -atan2(target_height - 0.3, r - 0.2); 
+  joints[3] = 1.2; 
+  joints[4] = 0.0; 
   joints[5] = 0.0;
   joints[6] = 0.0;
   
@@ -117,13 +115,11 @@ geometry_msgs::msg::Point IKTrajectoryPlanner::forward_kinematics(const std::vec
     return point;
   }
   
-  // Simplified forward kinematics
   double lift_height = joints[0];
   double base_rotation = joints[1];
   double shoulder_lift = joints[2];
   double elbow = joints[3];
   
-  // Approximate arm reach calculation
   double upper_arm = 0.612;
   double forearm = 0.572;
   double arm_extension = upper_arm * cos(shoulder_lift) + forearm * cos(shoulder_lift + elbow);
@@ -131,7 +127,7 @@ geometry_msgs::msg::Point IKTrajectoryPlanner::forward_kinematics(const std::vec
   
   point.x = arm_extension * cos(base_rotation);
   point.y = arm_extension * sin(base_rotation);
-  point.z = lift_height + 0.18 + 0.163 + arm_height + 0.174; // Base heights + arm height
+  point.z = lift_height + 0.18 + 0.163 + arm_height + 0.174; 
   
   return point;
 }
@@ -141,7 +137,6 @@ void IKTrajectoryPlanner::control_timer_callback()
   if (trajectory_active_ && !waypoints_.empty()) {
     double elapsed_time = (this->now() - trajectory_start_time_).seconds();
     
-    // Find which waypoint we should be targeting now
     size_t target_waypoint = 0;
     for (size_t i = 0; i < waypoints_.size(); ++i) {
       if (elapsed_time <= waypoints_[i].time_from_start) {
@@ -150,12 +145,10 @@ void IKTrajectoryPlanner::control_timer_callback()
       }
     }
     
-    // If we've passed all waypoints, use the last one
     if (target_waypoint >= waypoints_.size()) {
       target_waypoint = waypoints_.size() - 1;
     }
     
-    // Check if we've moved to a new waypoint
     if (target_waypoint != current_waypoint_index_) {
       current_waypoint_index_ = target_waypoint;
       RCLCPP_INFO(this->get_logger(), "Moving to waypoint %zu: (%.2f, %.2f, %.2f) - %s",

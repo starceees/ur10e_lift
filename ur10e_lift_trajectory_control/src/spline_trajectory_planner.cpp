@@ -92,7 +92,7 @@ std::vector<SplineSegment> SplineTrajectoryPlanner::create_cubic_spline(const st
   size_t n = times.size() - 1;
   if (n < 1) return segments;
   
-  // Simple linear interpolation for now (can enhance later)
+
   for (size_t i = 0; i < n; ++i) {
     SplineSegment seg;
     double dt = times[i+1] - times[i];
