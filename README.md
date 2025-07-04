@@ -95,7 +95,8 @@ The lift mechanism is defined in `ur10e_lift.urdf.xacro`.  The platform is attac
   </joint>
 ```
 This joint is interfaced to Gazebo via a `ros2_control` plugin so that controllers can command its position.
-
+## Demo Video 
+[📹 Watch Demo Video](ur10e_lift_control.mkv)
 ## License
 
 The packages are released under the MIT license; see the individual `LICENSE` files for details.
