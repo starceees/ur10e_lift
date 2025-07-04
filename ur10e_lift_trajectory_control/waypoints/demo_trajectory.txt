@@ -1,0 +1,21 @@
+# UR10e Lift Trajectory Waypoints
+# Format: lift_joint ur10e_shoulder_pan ur10e_shoulder_lift ur10e_elbow ur10e_wrist_1 ur10e_wrist_2 ur10e_wrist_3 time_from_start description
+# Joint angles in radians, lift in meters, time in seconds
+
+# Home position
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 Home position
+
+# Lift up
+0.5 0.0 0.0 0.0 0.0 0.0 0.0 3.0 Lift halfway up
+
+# Rotate base 90 degrees
+0.5 1.57 0.0 0.0 0.0 0.0 0.0 6.0 Rotate base 90 degrees
+
+# Extend arm
+0.5 1.57 -1.0 1.5 0.0 0.0 0.0 9.0 Extend arm
+
+# Lift to top and rotate wrist
+0.9 1.57 -1.0 1.5 1.57 0.0 0.0 12.0 Lift up and rotate wrist
+
+# Return to home
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 18.0 Return home

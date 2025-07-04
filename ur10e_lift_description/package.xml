@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>ur10e_lift_description</name>
+  <version>0.1.0</version>
+  <description>UR-10e on a 1 m vertical lift for Ignition Gazebo simulation.</description>
+  <maintainer email="raghuram@example.com">Raghuram</maintainer>
+  <license>MIT</license>
+
+  <!-- build -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- runtime & build -->
+  <depend>xacro</depend>
+  <depend>ur_description</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>ros_gz_sim</depend>        <!-- or ros_ign_gazebo on older distros -->
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>ament_index_python</depend>
+
+  <!-- tests (optional) -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
