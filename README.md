@@ -67,7 +67,12 @@ ros2 launch ur10e_lift_trajectory_control ik_trajectory_control.launch.py     # 
 ros2 launch ur10e_lift_trajectory_control spline_trajectory_control.launch.py # cubic splines
 ```
 Each planner subscribes to a waypoint file topic to start executing a path.  Example waypoint files are provided under `ur10e_lift_trajectory_control/waypoints/`.
+> **Note**: Make sure to change the **Fixed Frame** from `lift_link` to `world` in RViz Global Options for proper visualization.
+## Publish the trajectory to Rviz 
+```bash
+ros2 topic pub --once /load_cartesian_waypoints std_msgs/msg/String "data: '$(ros2 pkg prefix ur10e_lift_trajectory_control)/share/ur10e_lift_trajectory_control/waypoints/cartesian_demo.txt'"
 
+```
 ### Example Robot Controller
 
 For testing the robot without trajectories, `robot_controller.py` publishes joint states at 100 Hz and runs a small demo sequence:
